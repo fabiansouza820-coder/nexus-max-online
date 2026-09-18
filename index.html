@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b14"><link rel="manifest" href="/manifest.webmanifest">
+<title>NEXUS AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080b14;color:#eef2ff;font-family:Inter,system-ui,Arial;min-height:100vh}
+.app{display:flex;min-height:100vh}.side{width:250px;background:#0d1120;border-right:1px solid #20283b;padding:20px;position:fixed;inset:0 auto 0 0}.brand{font-weight:900;font-size:24px;letter-spacing:.08em}.sub{color:#8792aa;font-size:12px;margin-top:4px}.nav{margin-top:28px;display:grid;gap:8px}.nav button{background:transparent;border:0;color:#b9c3d8;text-align:left;padding:12px;border-radius:12px;font-size:14px}.nav button.active,.nav button:hover{background:#161d31;color:white}.main{margin-left:250px;flex:1;max-width:1200px;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{padding:8px 12px;border:1px solid #27304a;border-radius:999px;color:#9aa7c1;font-size:12px}.grid{display:grid;grid-template-columns:1fr 310px;gap:16px;margin-top:18px}.card{background:#0d1220;border:1px solid #20283b;border-radius:18px;padding:16px}.chat{min-height:65vh;display:flex;flex-direction:column}.msgs{flex:1;overflow:auto;padding:8px}.msg{max-width:86%;padding:13px 15px;border-radius:15px;margin:10px 0;white-space:pre-wrap;line-height:1.45}.user{margin-left:auto;background:#1a2440}.ai{background:#11182a;border:1px solid #242e46}.composer{display:flex;gap:10px;margin-top:12px}.composer textarea{flex:1;min-height:58px;resize:none;background:#090d18;color:white;border:1px solid #29334b;border-radius:14px;padding:13px}.btn{border:0;border-radius:13px;padding:0 18px;background:#5865f2;color:white;font-weight:800}.mini{font-size:12px;color:#8792aa}.tool{display:inline-block;margin:3px 4px 3px 0;padding:6px 9px;border-radius:999px;background:#151d31;border:1px solid #27304a;font-size:11px}.project{width:100%;background:#11182a;color:white;border:1px solid #26314a;padding:10px;border-radius:10px;text-align:left;margin-top:7px}.status{margin-top:15px}.hidden{display:none}@media(max-width:850px){.side{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid #20283b}.app{display:block}.main{margin-left:0;padding:12px}.grid{grid-template-columns:1fr}.nav{display:flex;overflow:auto;margin-top:15px}.nav button{white-space:nowrap}.chat{min-height:72vh}.side .sub{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">NEXUS AI</div><div class="sub">CORE AUTÔNOMO • v0.3</div>
+  <div class="nav"><button class="active">Chat</button><button onclick="newProject()">+ Projeto</button><button onclick="showMemory()">Memória</button></div>
+  <div class="status card"><div class="mini">PROVIDERS</div><div id="providers">carregando...</div></div>
+  <div class="card" style="margin-top:12px"><div class="mini">PROJETO</div><div id="projectName">Projeto Nexus</div><div id="projects"></div></div>
+</aside>
+<main class="main">
+ <div class="top"><div><h1 style="margin:0">Sala do Nexus</h1><div class="mini">Pesquisa • ferramentas • arquivos • código • memória</div></div><div class="pill" id="mode">conectando</div></div>
+ <div class="grid">
+  <section class="card chat"><div id="msgs" class="msgs"><div class="msg ai">Fala comigo. Eu posso planejar a tarefa, pesquisar a web, executar Python quando fizer sentido, usar a memória do projeto e distribuir o trabalho entre os modelos configurados.</div></div>
+  <div class="composer"><textarea id="input" placeholder="O que você quer que o Nexus faça?"></textarea><button class="btn" onclick="send()">ENVIAR</button></div></section>
+  <aside class="card"><h3>Plano do Nexus</h3><div id="plan" class="mini">O plano aparece aqui após cada pedido.</div><hr style="border-color:#20283b"><h3>Memória</h3><div id="memory" class="mini">A memória é vinculada ao projeto.</div></aside>
+ </div>
+</main>
+</div>
+<script>
+let projectId="default", projectName="Projeto Nexus";
+const $=id=>document.getElementById(id);
+async function load(){
+ const s=await fetch('/api/status').then(r=>r.json());
+ $('providers').innerHTML=(s.available.length?s.available.map(x=>`<span class="tool">${x}</span>`).join(''):'<span class="mini">nenhum configurado</span>');
+ $('mode').textContent=s.available.length?'LIVE':'DEMO';
+ const p=await fetch('/api/projects').then(r=>r.json()); renderProjects(p.projects);
+}
+function renderProjects(ps){$('projects').innerHTML=Object.values(ps).map(p=>`<button class="project" onclick="selectProject('${p.id}','${(p.name||'').replaceAll("'","")}')">${p.name}</button>`).join('')}
+function selectProject(id,name){projectId=id;projectName=name||'Projeto Nexus';$('projectName').textContent=projectName;loadMemory()}
+async function loadMemory(){const p=await fetch('/api/projects').then(r=>r.json()); $('memory').textContent=(p.projects[projectId]?.memory||'Memória vazia').slice(-1500)}
+async function newProject(){const name=prompt('Nome do projeto:','Meu projeto');if(!name)return;const p=await fetch('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})}).then(r=>r.json());selectProject(p.id,p.name);load()}
+function add(text,cls){const d=document.createElement('div');d.className='msg '+cls;d.textContent=text;$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
+async function send(){const el=$('input');const message=el.value.trim();if(!message)return;el.value='';add(message,'user');add('Nexus pensando e acionando ferramentas...','ai');const loading=$('msgs').lastChild;try{const r=await fetch('/api/nexus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,projectId})}).then(r=>r.json());loading.remove();add(r.answer||r.error,'ai');$('plan').innerHTML=`<b>Etapas:</b> ${r.plan.roles.join(' → ')}<br><b>Ferramentas:</b> ${r.plan.tools.length?r.plan.tools.map(x=>`<span class="tool">${x}</span>`).join(''):'nenhuma'}<br><b>Modelos:</b> ${(r.providers||[]).join(', ')||'demo'}`;loadMemory()}catch(e){loading.textContent='Erro: '+e.message}}
+function showMemory(){loadMemory();alert('A memória atual do projeto está no painel à direita.')}
+$('input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}})
+load();
+</script>
+</body></html>
