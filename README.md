@@ -1,24 +1,36 @@
-# NEXUS AI v0.4 MAX ONLINE
+# NEXUS AI MAX v0.5 — ONLINE (estrutura raiz)
 
-Baseada no teste visual do celular, esta versão aumenta a interface mobile e adiciona:
-- modo ONLINE/DEMO;
-- voz para entrada (Web Speech API);
-- leitura da resposta por voz;
-- anexos TXT/CSV/JSON/MD enviados ao Nexus;
-- memória de projeto;
-- ferramentas visíveis no plano;
-- layout mobile-first.
+Versão preparada para deploy simples no Render pelo GitHub, sem depender da pasta `public`.
 
-## Teste no celular
-O NEXUS precisa ser servido por HTTP/HTTPS para que o PWA e as chamadas `/api` funcionem.
+## Estrutura
 
-1. Copie `.env.example` para `.env` e configure pelo menos uma API.
-2. `node server.mjs`
-3. No celular, abra `http://IP-DO-PC:3000` na mesma Wi-Fi.
-4. Chrome → menu → Adicionar à tela inicial/Instalar app.
+Todos os arquivos principais ficam na raiz:
+- `index.html`
+- `manifest.webmanifest`
+- `server.mjs`
+- `package.json`
+- `render.yaml`
+- `projects.json`
 
-## Voz
-O botão 🎙️ usa reconhecimento de voz do navegador. O botão "Ler última resposta" usa síntese de voz do navegador.
+## Rodar
 
-## Segurança
-Nunca coloque chaves de API no HTML ou no APK. Elas devem ficar no backend/servidor.
+```bash
+npm install
+npm start
+```
+
+Abra `http://localhost:3000`.
+
+## APIs
+
+Configure as chaves no ambiente do servidor (Render), nunca no navegador/GitHub:
+- `OPENAI_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `GEMINI_API_KEY`
+- `XAI_API_KEY`
+
+Sem chaves, o app abre em modo DEMO.
+
+## Observação sobre memória
+
+`projects.json` é uma memória local simples para teste. Em hospedagem com armazenamento efêmero, ela pode ser perdida após reinício/deploy. Para produção, migrar a memória para banco de dados.

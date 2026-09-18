@@ -4,9 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 
 const ROOT = process.cwd();
-const PUBLIC = path.join(ROOT, "public");
-const DATA = path.join(ROOT, "data");
-const PROJECTS = path.join(DATA, "projects.json");
+const PROJECTS = path.join(ROOT, "projects.json");
 const PORT = Number(process.env.PORT || 3000);
 const MAX_TOOL_STEPS = Number(process.env.NEXUS_MAX_TOOL_STEPS || 6);
 
@@ -20,8 +18,7 @@ async function loadEnv() {
   } catch {}
 }
 await loadEnv();
-await fs.mkdir(DATA, {recursive:true});
-try { await fs.access(PROJECTS); } catch { await fs.writeFile(PROJECTS, "{}"); }
+try { await fs.access(PROJECTS); } catch { await fs.writeFile(PROJECTS, "{}\n"); }
 
 const cfg = {
   openai: !!process.env.OPENAI_API_KEY,
@@ -184,7 +181,8 @@ async function nexusRun(message, projectId="default", attachment=null) {
     providers:[], evidence
   };
 
-  const context = `MEMÓRIA DO PROJETO:\n${memory || "(vazia)"}\n\nFERRAMENTAS:\n${evidence.join("\n\n") || "(nenhuma)"}\n\nPEDIDO:\n${message}`;
+  const attachmentText = attachment?.name ? `\n\nARQUIVO ANEXADO (${attachment.name}):\n${clean(attachment.content || "").slice(0,30000)}` : "";
+  const context = `MEMÓRIA DO PROJETO:\n${memory || "(vazia)"}${attachmentText}\n\nFERRAMENTAS:\n${evidence.join("\n\n") || "(nenhuma)"}\n\nPEDIDO:\n${message}`;
   const outputs=[];
   for (let i=0;i<Math.min(prov.length,3);i++) {
     try {
@@ -239,8 +237,9 @@ async function route(req,res,url) {
   }
   if (url.pathname.startsWith("/api/")) return json(res,404,{error:"Rota não encontrada"});
   const file = url.pathname==="/" ? "index.html" : url.pathname.slice(1);
-  try { const data=await fs.readFile(path.join(PUBLIC,file)); const ext=path.extname(file); const type={".html":"text/html; charset=utf-8",".js":"text/javascript; charset=utf-8",".css":"text/css; charset=utf-8",".json":"application/json",".webmanifest":"application/manifest+json"}[ext]||"application/octet-stream"; return text(res,200,data,type); }
+  if (file.includes("..") || file.includes("\\")) return text(res,400,"Bad request");
+  try { const data=await fs.readFile(path.join(ROOT,file)); const ext=path.extname(file); const type={".html":"text/html; charset=utf-8",".js":"text/javascript; charset=utf-8",".css":"text/css; charset=utf-8",".json":"application/json",".webmanifest":"application/manifest+json"}[ext]||"application/octet-stream"; return text(res,200,data,type); }
   catch { return text(res,404,"Not found"); }
 }
 
-http.createServer((req,res)=>route(req,res,new URL(req.url,`http://${req.headers.host}`)).catch(e=>json(res,500,{error:e.message}))).listen(PORT,()=>console.log(`NEXUS AI v0.3 em http://localhost:${PORT}`));
+http.createServer((req,res)=>route(req,res,new URL(req.url,`http://${req.headers.host}`)).catch(e=>json(res,500,{error:e.message}))).listen(PORT,"0.0.0.0",()=>console.log(`NEXUS AI MAX v0.5 em http://localhost:${PORT}`));
