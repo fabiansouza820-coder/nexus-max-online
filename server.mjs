@@ -164,7 +164,7 @@ async function buildPlan(message, projectMemory) {
   return {needs, tools, roles, memory: projectMemory || ""};
 }
 
-async function nexusRun(message, projectId="default") {
+async function nexusRun(message, projectId="default", attachment=null) {
   const projects = await getProjects();
   const memory = projects[projectId]?.memory || "";
   const plan = await buildPlan(message, memory);
@@ -230,7 +230,7 @@ async function route(req,res,url) {
   }
   if (url.pathname==="/api/nexus" && req.method==="POST") {
     const b=await body(req); if(!b.message) return json(res,400,{error:"message é obrigatório"});
-    return json(res,200,await nexusRun(b.message,b.projectId||"default"));
+    return json(res,200,await nexusRun(b.message,b.projectId||"default",b.attachment||null));
   }
   if (url.pathname==="/api/memory" && req.method==="POST") {
     const b=await body(req); const p=await getProjects(); const id=b.projectId||"default";
