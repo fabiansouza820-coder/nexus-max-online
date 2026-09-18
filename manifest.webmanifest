@@ -1,0 +1,11 @@
+{
+  "name":"NEXUS AI MAX",
+  "short_name":"NEXUS",
+  "start_url":"/",
+  "scope":"/",
+  "display":"standalone",
+  "orientation":"portrait",
+  "background_color":"#070a12",
+  "theme_color":"#070a12",
+  "description":"Cérebro multi-modelo autônomo com ferramentas, memória e voz"
+}

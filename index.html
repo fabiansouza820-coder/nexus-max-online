@@ -3,46 +3,98 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080b14"><link rel="manifest" href="/manifest.webmanifest">
-<title>NEXUS AI</title>
+<meta name="description" content="NEXUS AI — cérebro multi-modelo autônomo">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>NEXUS AI MAX</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080b14;color:#eef2ff;font-family:Inter,system-ui,Arial;min-height:100vh}
-.app{display:flex;min-height:100vh}.side{width:250px;background:#0d1120;border-right:1px solid #20283b;padding:20px;position:fixed;inset:0 auto 0 0}.brand{font-weight:900;font-size:24px;letter-spacing:.08em}.sub{color:#8792aa;font-size:12px;margin-top:4px}.nav{margin-top:28px;display:grid;gap:8px}.nav button{background:transparent;border:0;color:#b9c3d8;text-align:left;padding:12px;border-radius:12px;font-size:14px}.nav button.active,.nav button:hover{background:#161d31;color:white}.main{margin-left:250px;flex:1;max-width:1200px;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{padding:8px 12px;border:1px solid #27304a;border-radius:999px;color:#9aa7c1;font-size:12px}.grid{display:grid;grid-template-columns:1fr 310px;gap:16px;margin-top:18px}.card{background:#0d1220;border:1px solid #20283b;border-radius:18px;padding:16px}.chat{min-height:65vh;display:flex;flex-direction:column}.msgs{flex:1;overflow:auto;padding:8px}.msg{max-width:86%;padding:13px 15px;border-radius:15px;margin:10px 0;white-space:pre-wrap;line-height:1.45}.user{margin-left:auto;background:#1a2440}.ai{background:#11182a;border:1px solid #242e46}.composer{display:flex;gap:10px;margin-top:12px}.composer textarea{flex:1;min-height:58px;resize:none;background:#090d18;color:white;border:1px solid #29334b;border-radius:14px;padding:13px}.btn{border:0;border-radius:13px;padding:0 18px;background:#5865f2;color:white;font-weight:800}.mini{font-size:12px;color:#8792aa}.tool{display:inline-block;margin:3px 4px 3px 0;padding:6px 9px;border-radius:999px;background:#151d31;border:1px solid #27304a;font-size:11px}.project{width:100%;background:#11182a;color:white;border:1px solid #26314a;padding:10px;border-radius:10px;text-align:left;margin-top:7px}.status{margin-top:15px}.hidden{display:none}@media(max-width:850px){.side{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid #20283b}.app{display:block}.main{margin-left:0;padding:12px}.grid{grid-template-columns:1fr}.nav{display:flex;overflow:auto;margin-top:15px}.nav button{white-space:nowrap}.chat{min-height:72vh}.side .sub{display:none}}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#070a12;color:#f4f6ff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,textarea,input{font:inherit}.app{min-height:100vh;display:flex}.side{width:250px;position:fixed;inset:0 auto 0 0;background:#0b0f1a;border-right:1px solid #202a40;padding:18px;z-index:4}.brand{font-size:25px;font-weight:950;letter-spacing:.08em}.sub,.mini{color:#8c98b2;font-size:12px}.nav{display:grid;gap:7px;margin-top:24px}.nav button{border:0;background:transparent;color:#c4cce0;text-align:left;padding:11px 12px;border-radius:12px}.nav button.active,.nav button:hover{background:#18213a;color:#fff}.main{margin-left:250px;width:calc(100% - 250px);padding:18px;max-width:1350px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.hero h1{margin:0;font-size:28px}.pill{border:1px solid #33405f;border-radius:999px;padding:7px 12px;color:#aeb9d0;font-size:12px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:15px;margin-top:15px}.card{background:#0d1220;border:1px solid #202a40;border-radius:20px;box-shadow:0 15px 50px #0003}.chat{min-height:78vh;display:flex;flex-direction:column;padding:12px}.msgs{flex:1;overflow:auto;padding:6px}.msg{max-width:88%;padding:13px 15px;border-radius:16px;margin:9px 0;white-space:pre-wrap;line-height:1.48}.user{margin-left:auto;background:#1a2647}.ai{background:#11192a;border:1px solid #25314a}.composer{display:flex;gap:8px;padding:7px 0 0}.composer textarea{min-height:62px;max-height:170px;flex:1;resize:vertical;background:#080c15;color:#fff;border:1px solid #293651;border-radius:16px;padding:13px;outline:none}.actions{display:flex;gap:7px}.btn,.icon{border:0;border-radius:14px;background:#5965f2;color:#fff;font-weight:850;padding:0 18px}.icon{width:58px;padding:0;font-size:21px}.icon.alt{background:#18213a;border:1px solid #2a3754}.toolbar{display:flex;gap:7px;flex-wrap:wrap;padding:8px 0}.tool{display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:999px;background:#151d31;border:1px solid #293652;color:#bac4da;font-size:11px}.panel{padding:15px}.project{width:100%;background:#11182a;color:#fff;border:1px solid #26314a;padding:10px;border-radius:10px;text-align:left;margin-top:7px}.divider{border:0;border-top:1px solid #202a40;margin:14px 0}.filebox{border:1px dashed #35415d;border-radius:14px;padding:12px;text-align:center;color:#9aa6bf;cursor:pointer}.filebox input{display:none}.meter{height:7px;background:#151d2d;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;width:88%;background:#6b73ff}.online{color:#9ee7bd}.warn{color:#ffd18a}
+@media(max-width:850px){
+ .app{display:block}.side{position:sticky;top:0;width:100%;height:auto;padding:11px 12px;border-right:0;border-bottom:1px solid #202a40}.brand{font-size:20px}.sub{display:none}.nav{display:flex;margin-top:8px;overflow:auto}.nav button{white-space:nowrap;padding:8px 10px}.side .status,.side .projectcard{display:none}.main{margin:0;width:100%;padding:9px}.hero h1{font-size:23px}.grid{grid-template-columns:1fr}.grid>aside{display:none}.chat{min-height:calc(100vh - 125px);border-radius:18px}.msg{max-width:92%}.composer{position:sticky;bottom:0;background:#0d1220;padding:8px 0 env(safe-area-inset-bottom)}.composer textarea{min-height:56px}.btn{padding:0 15px}.icon{width:52px}.toolbar{overflow:auto;flex-wrap:nowrap}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="side">
-  <div class="brand">NEXUS AI</div><div class="sub">CORE AUTÔNOMO • v0.3</div>
-  <div class="nav"><button class="active">Chat</button><button onclick="newProject()">+ Projeto</button><button onclick="showMemory()">Memória</button></div>
-  <div class="status card"><div class="mini">PROVIDERS</div><div id="providers">carregando...</div></div>
-  <div class="card" style="margin-top:12px"><div class="mini">PROJETO</div><div id="projectName">Projeto Nexus</div><div id="projects"></div></div>
+  <div class="brand">NEXUS <span style="opacity:.55">MAX</span></div>
+  <div class="sub">CORE AUTÔNOMO • ONLINE</div>
+  <div class="nav">
+    <button class="active">💬 Chat</button>
+    <button onclick="newProject()">＋ Projeto</button>
+    <button onclick="showMemory()">🧠 Memória</button>
+  </div>
+  <div class="status card panel"><div class="mini">CONEXÕES</div><div id="providers">carregando...</div><div class="mini" style="margin-top:8px">Cérebro</div><div class="meter"><i></i></div></div>
+  <div class="projectcard card panel" style="margin-top:10px"><div class="mini">PROJETO ATUAL</div><div id="projectName">Projeto Nexus</div><div id="projects"></div></div>
 </aside>
 <main class="main">
- <div class="top"><div><h1 style="margin:0">Sala do Nexus</h1><div class="mini">Pesquisa • ferramentas • arquivos • código • memória</div></div><div class="pill" id="mode">conectando</div></div>
+ <div class="top hero">
+  <div><h1>Sala do Nexus</h1><div class="mini">Pesquisa • ferramentas • arquivos • código • memória • voz</div></div>
+  <div class="pill" id="mode">ONLINE</div>
+ </div>
  <div class="grid">
-  <section class="card chat"><div id="msgs" class="msgs"><div class="msg ai">Fala comigo. Eu posso planejar a tarefa, pesquisar a web, executar Python quando fizer sentido, usar a memória do projeto e distribuir o trabalho entre os modelos configurados.</div></div>
-  <div class="composer"><textarea id="input" placeholder="O que você quer que o Nexus faça?"></textarea><button class="btn" onclick="send()">ENVIAR</button></div></section>
-  <aside class="card"><h3>Plano do Nexus</h3><div id="plan" class="mini">O plano aparece aqui após cada pedido.</div><hr style="border-color:#20283b"><h3>Memória</h3><div id="memory" class="mini">A memória é vinculada ao projeto.</div></aside>
+  <section class="card chat">
+   <div class="toolbar">
+    <span class="tool">🌐 Web</span><span class="tool">🐍 Python</span><span class="tool">📁 Arquivos</span><span class="tool">🧠 Memória</span><span class="tool">🎙️ Voz</span>
+   </div>
+   <div id="msgs" class="msgs"><div class="msg ai">🚀 <b>NEXUS MAX</b> online.<br><br>Fala comigo. Eu posso planejar a tarefa, acionar ferramentas, distribuir o trabalho entre modelos e guardar contexto do projeto.<br><br><span class="mini">Toque no 🎙️ para falar comigo.</span></div></div>
+   <div class="filebox" onclick="$('file').click()">📎 Anexar arquivo <span class="mini">(TXT, CSV, JSON, MD)</span><input id="file" type="file" accept=".txt,.csv,.json,.md,.log,.xml"></div>
+   <div class="composer">
+    <textarea id="input" placeholder="O que você quer que o Nexus faça?"></textarea>
+    <div class="actions"><button class="icon alt" id="mic" onclick="toggleVoice()" title="Falar">🎙️</button><button class="btn" onclick="send()">ENVIAR</button></div>
+   </div>
+  </section>
+  <aside class="card panel">
+   <h3 style="margin-top:0">Plano do Nexus</h3><div id="plan" class="mini">O plano aparece aqui após cada pedido.</div>
+   <hr class="divider"><h3>Memória do projeto</h3><div id="memory" class="mini">Memória vinculada ao projeto.</div>
+   <hr class="divider"><h3>Voz</h3><button class="project" onclick="speakLast()">🔊 Ler última resposta</button>
+  </aside>
  </div>
 </main>
 </div>
 <script>
-let projectId="default", projectName="Projeto Nexus";
+let projectId="default", projectName="Projeto Nexus", lastAnswer="";
 const $=id=>document.getElementById(id);
 async function load(){
- const s=await fetch('/api/status').then(r=>r.json());
- $('providers').innerHTML=(s.available.length?s.available.map(x=>`<span class="tool">${x}</span>`).join(''):'<span class="mini">nenhum configurado</span>');
- $('mode').textContent=s.available.length?'LIVE':'DEMO';
- const p=await fetch('/api/projects').then(r=>r.json()); renderProjects(p.projects);
+ try{
+  const s=await fetch('/api/status').then(r=>r.json());
+  $('providers').innerHTML=(s.available?.length?s.available.map(x=>`<span class="tool">${x}</span>`).join(''):'<span class="warn">Configure uma API</span>');
+  $('mode').textContent=s.available?.length?'ONLINE':'DEMO';
+  const p=await fetch('/api/projects').then(r=>r.json()); renderProjects(p.projects); loadMemory();
+ }catch(e){$('mode').textContent='OFFLINE';$('providers').innerHTML='<span class="warn">Servidor não conectado</span>'}
 }
 function renderProjects(ps){$('projects').innerHTML=Object.values(ps).map(p=>`<button class="project" onclick="selectProject('${p.id}','${(p.name||'').replaceAll("'","")}')">${p.name}</button>`).join('')}
 function selectProject(id,name){projectId=id;projectName=name||'Projeto Nexus';$('projectName').textContent=projectName;loadMemory()}
-async function loadMemory(){const p=await fetch('/api/projects').then(r=>r.json()); $('memory').textContent=(p.projects[projectId]?.memory||'Memória vazia').slice(-1500)}
+async function loadMemory(){try{const p=await fetch('/api/projects').then(r=>r.json());$('memory').textContent=(p.projects[projectId]?.memory||'Memória vazia').slice(-1800)}catch{}}
 async function newProject(){const name=prompt('Nome do projeto:','Meu projeto');if(!name)return;const p=await fetch('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})}).then(r=>r.json());selectProject(p.id,p.name);load()}
-function add(text,cls){const d=document.createElement('div');d.className='msg '+cls;d.textContent=text;$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
-async function send(){const el=$('input');const message=el.value.trim();if(!message)return;el.value='';add(message,'user');add('Nexus pensando e acionando ferramentas...','ai');const loading=$('msgs').lastChild;try{const r=await fetch('/api/nexus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,projectId})}).then(r=>r.json());loading.remove();add(r.answer||r.error,'ai');$('plan').innerHTML=`<b>Etapas:</b> ${r.plan.roles.join(' → ')}<br><b>Ferramentas:</b> ${r.plan.tools.length?r.plan.tools.map(x=>`<span class="tool">${x}</span>`).join(''):'nenhuma'}<br><b>Modelos:</b> ${(r.providers||[]).join(', ')||'demo'}`;loadMemory()}catch(e){loading.textContent='Erro: '+e.message}}
-function showMemory(){loadMemory();alert('A memória atual do projeto está no painel à direita.')}
-$('input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}})
+function add(text,cls){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=String(text).replace(/</g,'&lt;').replace(/\n/g,'<br>');$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
+async function send(){
+ const el=$('input'), message=el.value.trim(); if(!message)return;
+ el.value=''; add(message,'user'); add('🧠 Nexus planejando e acionando ferramentas...','ai'); const loading=$('msgs').lastChild;
+ const file=$('file').files[0]; let attachment=null;
+ if(file){ try{attachment={name:file.name,content:(await file.text()).slice(0,30000)}; loading.textContent='📎 Lendo '+file.name+'…'}catch{} }
+ try{
+  const r=await fetch('/api/nexus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,projectId,attachment})}).then(r=>r.json());
+  loading.remove(); lastAnswer=r.answer||r.error||'Sem resposta'; add(lastAnswer,'ai');
+  if(r.plan) $('plan').innerHTML=`<b>Etapas:</b> ${r.plan.roles.join(' → ')}<br><b>Ferramentas:</b> ${r.plan.tools.length?r.plan.tools.map(x=>`<span class="tool">${x}</span>`).join(''):'nenhuma'}<br><b>Modelos:</b> ${(r.providers||[]).join(', ')||'demo'}`;
+  loadMemory();
+ }catch(e){loading.textContent='❌ Não consegui conectar ao cérebro online. Verifique se o servidor está aberto.'}
+}
+function toggleVoice(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){alert('Seu navegador não disponibilizou reconhecimento de voz. Use Chrome.');return}
+ if(window.rec){window.rec.stop();window.rec=null;$('mic').textContent='🎙️';return}
+ const r=new SR();r.lang='pt-BR';r.interimResults=true;r.continuous=false;window.rec=r;$('mic').textContent='⏹️';
+ r.onresult=e=>$('input').value=Array.from(e.results).map(x=>x[0].transcript).join('');
+ r.onend=()=>{window.rec=null;$('mic').textContent='🎙️'};
+ r.start();
+}
+function speakLast(){
+ if(!lastAnswer){alert('Ainda não há resposta para ler.');return}
+ if(!('speechSynthesis' in window)){alert('Síntese de voz não disponível neste navegador.');return}
+ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u);
+}
+$('input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
 load();
 </script>
-</body></html>
+</body></html></html>
